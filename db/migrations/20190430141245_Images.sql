@@ -7,8 +7,7 @@ CREATE TABLE images (
   deleted_at timestamp with time zone,
   filename text NOT NULL DEFAULT '',
   href text NOT NULL DEFAULT '',
-  creator_id integer NOT NULL default 0,
-  owner_id integer NOT NULL default 0
+  creator_id integer NOT NULL default 0
 );
 
 -- +goose Down
