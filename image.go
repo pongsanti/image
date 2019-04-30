@@ -1,4 +1,4 @@
-package response
+package image
 
 import (
 	"github.com/pongsanti/image/db/models"
@@ -11,6 +11,7 @@ type Image struct {
 	Filename  string
 	Href      string
 }
+
 
 func NewImage(img *models.Image) Image {
 	return Image{
