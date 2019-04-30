@@ -3,6 +3,7 @@ package route
 import (
 	"database/sql"
 	"fmt"
+	"github.com/go-chi/render"
 	"github.com/pongsanti/image/db/models"
 	"github.com/volatiletech/sqlboiler/boil"
 	"io/ioutil"
@@ -16,14 +17,20 @@ func CreateNewImageHandlerFunc(db *sql.DB, config Config) func(w http.ResponseWr
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Print("Image: CreateNewImageHandlerFunc")
 
+		renderError := func(err error) {
+			render.JSON(w, r, struct{ Error string }{
+				err.Error(),
+			})
+		}
+
 		ctx := r.Context()
 
 		r.ParseMultipartForm(config.MaxMemory)
 
 		file, handler, err := r.FormFile(config.FormKey)
 		if err != nil {
-			log.Print("Error Retrieving the File")
-			log.Print(err)
+			log.Print("Error Retrieving the File ", err)
+			renderError(errCannotGetFormFile)
 			return
 		}
 		defer file.Close()
@@ -35,6 +42,7 @@ func CreateNewImageHandlerFunc(db *sql.DB, config Config) func(w http.ResponseWr
 		fileBytes, err := ioutil.ReadAll(file)
 		if err != nil {
 			log.Print("Cannot read upload file ", err)
+			renderError(errCannotReadFile)
 			return
 		}
 
@@ -42,6 +50,7 @@ func CreateNewImageHandlerFunc(db *sql.DB, config Config) func(w http.ResponseWr
 		tx, err := db.BeginTx(ctx, nil)
 		if err != nil {
 			log.Print("Error creating tx ", err)
+			renderError(errConnectingDatabase)
 			return
 		}
 
@@ -54,6 +63,7 @@ func CreateNewImageHandlerFunc(db *sql.DB, config Config) func(w http.ResponseWr
 		err = img.Insert(ctx, tx, boil.Infer())
 		if err != nil {
 			log.Print("Error insert an image record ", err)
+			renderError(errConnectingDatabase)
 			tx.Rollback()
 			return
 		}
@@ -66,15 +76,17 @@ func CreateNewImageHandlerFunc(db *sql.DB, config Config) func(w http.ResponseWr
 		if err != nil {
 			tx.Rollback()
 			log.Print("Write to the storage error ", err)
+			renderError(errCannotWriteFile)
 			return
 		}
 
 		// update to id-filename
-		img.Href = filePath
+		img.Href = physicalFilename
 		_, err = img.Update(ctx, tx, boil.Infer())
 		if err != nil {
 			tx.Rollback()
 			log.Print("Update image file path error ", err)
+			renderError(errConnectingDatabase)
 			return
 		}
 
@@ -82,9 +94,11 @@ func CreateNewImageHandlerFunc(db *sql.DB, config Config) func(w http.ResponseWr
 		if err != nil {
 			tx.Rollback()
 			log.Print("Error commit tx ", err)
+			renderError(errConnectingDatabase)
 			return
 		}
 
 		log.Print("Successfully uploaded file")
+		render.JSON(w, r, img)
 	}
 }
