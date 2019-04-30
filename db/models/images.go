@@ -31,6 +31,7 @@ type Image struct {
 	Filename  string    `boil:"filename" json:"filename" toml:"filename" yaml:"filename"`
 	Href      string    `boil:"href" json:"href" toml:"href" yaml:"href"`
 	CreatorID int       `boil:"creator_id" json:"creator_id" toml:"creator_id" yaml:"creator_id"`
+	OwnerID   int       `boil:"owner_id" json:"owner_id" toml:"owner_id" yaml:"owner_id"`
 
 	R *imageR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L imageL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -44,6 +45,7 @@ var ImageColumns = struct {
 	Filename  string
 	Href      string
 	CreatorID string
+	OwnerID   string
 }{
 	ID:        "id",
 	CreatedAt: "created_at",
@@ -52,6 +54,7 @@ var ImageColumns = struct {
 	Filename:  "filename",
 	Href:      "href",
 	CreatorID: "creator_id",
+	OwnerID:   "owner_id",
 }
 
 // Generated where
@@ -126,6 +129,7 @@ var ImageWhere = struct {
 	Filename  whereHelperstring
 	Href      whereHelperstring
 	CreatorID whereHelperint
+	OwnerID   whereHelperint
 }{
 	ID:        whereHelperint{field: `id`},
 	CreatedAt: whereHelpertime_Time{field: `created_at`},
@@ -134,6 +138,7 @@ var ImageWhere = struct {
 	Filename:  whereHelperstring{field: `filename`},
 	Href:      whereHelperstring{field: `href`},
 	CreatorID: whereHelperint{field: `creator_id`},
+	OwnerID:   whereHelperint{field: `owner_id`},
 }
 
 // ImageRels is where relationship names are stored.
@@ -153,9 +158,9 @@ func (*imageR) NewStruct() *imageR {
 type imageL struct{}
 
 var (
-	imageColumns               = []string{"id", "created_at", "updated_at", "deleted_at", "filename", "href", "creator_id"}
+	imageColumns               = []string{"id", "created_at", "updated_at", "deleted_at", "filename", "href", "creator_id", "owner_id"}
 	imageColumnsWithoutDefault = []string{"updated_at", "deleted_at"}
-	imageColumnsWithDefault    = []string{"id", "created_at", "filename", "href", "creator_id"}
+	imageColumnsWithDefault    = []string{"id", "created_at", "filename", "href", "creator_id", "owner_id"}
 	imagePrimaryKeyColumns     = []string{"id"}
 )
 
