@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/go-chi/render"
+	"github.com/pongsanti/image"
 	"github.com/pongsanti/image/db/models"
 	"github.com/volatiletech/sqlboiler/boil"
 	"io/ioutil"
@@ -99,6 +100,9 @@ func CreateNewImageHandlerFunc(db *sql.DB, config Config) func(w http.ResponseWr
 		}
 
 		log.Print("Successfully uploaded file")
-		render.JSON(w, r, img)
+
+		render.JSON(w, r, image.ImageRes{
+			Image: (*image.Image)(img),
+		})
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
+	"github.com/pongsanti/image"
 	"github.com/pongsanti/image/db/models"
 	"log"
 	"net/http"
@@ -78,6 +79,8 @@ func DeleteImageHandlerFunc(db *sql.DB, config Config) func(w http.ResponseWrite
 			return
 		}
 
-		render.JSON(w, r, img)
+		render.JSON(w, r, image.ImageRes{
+			Image: (*image.Image)(img),
+		})
 	}
 }
