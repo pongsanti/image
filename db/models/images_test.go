@@ -568,7 +568,7 @@ func testImagesSelect(t *testing.T) {
 }
 
 var (
-	imageDBTypes = map[string]string{`ID`: `integer`, `CreatedAt`: `timestamp with time zone`, `UpdatedAt`: `timestamp with time zone`, `DeletedAt`: `timestamp with time zone`, `Filename`: `text`, `Href`: `text`, `FileType`: `text`, `FileSize`: `numeric`, `CreatorID`: `integer`}
+	imageDBTypes = map[string]string{`ID`: `integer`, `CreatedAt`: `timestamp with time zone`, `UpdatedAt`: `timestamp with time zone`, `DeletedAt`: `timestamp with time zone`, `Filename`: `text`, `Href`: `text`, `FileType`: `text`, `FileSize`: `integer`, `CreatorID`: `integer`}
 	_            = bytes.MinRead
 )
 

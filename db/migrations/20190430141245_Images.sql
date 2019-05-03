@@ -8,7 +8,7 @@ CREATE TABLE images (
   filename text NOT NULL DEFAULT '',
   href text NOT NULL DEFAULT '',
   file_type text NOT NULL DEFAULT '',
-  file_size numeric(12,2) NOT NULL DEFAULT 0.00,
+  file_size integer NOT NULL DEFAULT 0,
   creator_id integer NOT NULL DEFAULT 0
 );
 

@@ -20,20 +20,19 @@ import (
 	"github.com/volatiletech/sqlboiler/queries/qm"
 	"github.com/volatiletech/sqlboiler/queries/qmhelper"
 	"github.com/volatiletech/sqlboiler/strmangle"
-	"github.com/volatiletech/sqlboiler/types"
 )
 
 // Image is an object representing the database table.
 type Image struct {
-	ID        int           `boil:"id" json:"id" toml:"id" yaml:"id"`
-	CreatedAt time.Time     `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
-	UpdatedAt null.Time     `boil:"updated_at" json:"updated_at,omitempty" toml:"updated_at" yaml:"updated_at,omitempty"`
-	DeletedAt null.Time     `boil:"deleted_at" json:"deleted_at,omitempty" toml:"deleted_at" yaml:"deleted_at,omitempty"`
-	Filename  string        `boil:"filename" json:"filename" toml:"filename" yaml:"filename"`
-	Href      string        `boil:"href" json:"href" toml:"href" yaml:"href"`
-	FileType  string        `boil:"file_type" json:"file_type" toml:"file_type" yaml:"file_type"`
-	FileSize  types.Decimal `boil:"file_size" json:"file_size" toml:"file_size" yaml:"file_size"`
-	CreatorID int           `boil:"creator_id" json:"creator_id" toml:"creator_id" yaml:"creator_id"`
+	ID        int       `boil:"id" json:"id" toml:"id" yaml:"id"`
+	CreatedAt time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
+	UpdatedAt null.Time `boil:"updated_at" json:"updated_at,omitempty" toml:"updated_at" yaml:"updated_at,omitempty"`
+	DeletedAt null.Time `boil:"deleted_at" json:"deleted_at,omitempty" toml:"deleted_at" yaml:"deleted_at,omitempty"`
+	Filename  string    `boil:"filename" json:"filename" toml:"filename" yaml:"filename"`
+	Href      string    `boil:"href" json:"href" toml:"href" yaml:"href"`
+	FileType  string    `boil:"file_type" json:"file_type" toml:"file_type" yaml:"file_type"`
+	FileSize  int       `boil:"file_size" json:"file_size" toml:"file_size" yaml:"file_size"`
+	CreatorID int       `boil:"creator_id" json:"creator_id" toml:"creator_id" yaml:"creator_id"`
 
 	R *imageR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L imageL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -125,27 +124,6 @@ func (w whereHelperstring) LTE(x string) qm.QueryMod { return qmhelper.Where(w.f
 func (w whereHelperstring) GT(x string) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
 func (w whereHelperstring) GTE(x string) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
 
-type whereHelpertypes_Decimal struct{ field string }
-
-func (w whereHelpertypes_Decimal) EQ(x types.Decimal) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.EQ, x)
-}
-func (w whereHelpertypes_Decimal) NEQ(x types.Decimal) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.NEQ, x)
-}
-func (w whereHelpertypes_Decimal) LT(x types.Decimal) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LT, x)
-}
-func (w whereHelpertypes_Decimal) LTE(x types.Decimal) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.LTE, x)
-}
-func (w whereHelpertypes_Decimal) GT(x types.Decimal) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GT, x)
-}
-func (w whereHelpertypes_Decimal) GTE(x types.Decimal) qm.QueryMod {
-	return qmhelper.Where(w.field, qmhelper.GTE, x)
-}
-
 var ImageWhere = struct {
 	ID        whereHelperint
 	CreatedAt whereHelpertime_Time
@@ -154,7 +132,7 @@ var ImageWhere = struct {
 	Filename  whereHelperstring
 	Href      whereHelperstring
 	FileType  whereHelperstring
-	FileSize  whereHelpertypes_Decimal
+	FileSize  whereHelperint
 	CreatorID whereHelperint
 }{
 	ID:        whereHelperint{field: `id`},
@@ -164,7 +142,7 @@ var ImageWhere = struct {
 	Filename:  whereHelperstring{field: `filename`},
 	Href:      whereHelperstring{field: `href`},
 	FileType:  whereHelperstring{field: `file_type`},
-	FileSize:  whereHelpertypes_Decimal{field: `file_size`},
+	FileSize:  whereHelperint{field: `file_size`},
 	CreatorID: whereHelperint{field: `creator_id`},
 }
 
