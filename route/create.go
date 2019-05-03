@@ -3,15 +3,18 @@ package route
 import (
 	"database/sql"
 	"fmt"
-	"github.com/go-chi/render"
-	"github.com/pongsanti/image"
-	"github.com/pongsanti/image/db/models"
-	"github.com/volatiletech/sqlboiler/boil"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/go-chi/render"
+	"github.com/pongsanti/image"
+	"github.com/pongsanti/image/db/models"
+	"github.com/volatiletech/sqlboiler/boil"
 )
+
+const mimeMapContentTypeKey = "Content-Type"
 
 // CreateNewImageHandlerFunc handles file upload
 func CreateNewImageHandlerFunc(db *sql.DB, config Config) func(w http.ResponseWriter, r *http.Request) {
@@ -55,9 +58,16 @@ func CreateNewImageHandlerFunc(db *sql.DB, config Config) func(w http.ResponseWr
 			return
 		}
 
+		var fileType string
+		contentTypes := handler.Header[mimeMapContentTypeKey]
+		if len(contentTypes) > 0 {
+			fileType = contentTypes[0]
+		}
 		// insert to db
 		img := &models.Image{
 			Filename: handler.Filename,
+			FileSize: int(handler.Size),
+			FileType: fileType,
 		}
 
 		// insert to get id
